@@ -9,6 +9,7 @@ const selectedPizzaId = ref(null)
 const selectedSizeId = ref(null)
 const selectedToppingsIds = ref([])
 const totalPrice = ref(0)
+const showOrderSuccessModal = ref(false);
 
 const BASE_PATH = '/project-pizza';
 
@@ -90,6 +91,10 @@ const calculateTotalPrice = () => {
 
   totalPrice.value = currentPrice
 }
+
+const handleOrderNow = () => {
+  showOrderSuccessModal.value = true;
+};
 
 watch(selectedPizzaId, () => {
   selectedToppingsIds.value = selectedToppingsIds.value.filter((toppingId) =>
@@ -259,9 +264,20 @@ onMounted(() => {
           <p>Total Price</p>
           <p class="total-price">${{ totalPrice.toFixed(2) }}</p>
         </div>
-        <button class="btn order-now-btn">Order Now</button>
+        <button class="btn order-now-btn" @click="handleOrderNow">Order Now</button>
       </aside>
     </main>
+
+    <div v-if="showOrderSuccessModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-icon">
+          <img src="/img/invoice.png" alt="Order Success" class="custom-success-icon">
+        </div>
+        <h3>My Order Success!</h3>
+        <p>Order received. Thank you, we have received your order successfully.</p>
+        <button class="btn modal-close-btn" @click="showOrderSuccessModal = false">Close</button>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="container footer-content">
@@ -713,6 +729,77 @@ onMounted(() => {
   width: 100%;
   font-size: 1.2em;
   padding: 12px 20px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Latar belakang gelap transparan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Pastikan di atas semua elemen lain */
+}
+
+/* Gaya untuk Konten Modal */
+.modal-content {
+  background-color: var(--white);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%; /* Responsif */
+  transform: translateY(-20px); /* Sedikit animasi masuk */
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+/* Animasi sederhana untuk modal */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-icon {
+  font-size: 50px;
+  color: #28a745; /* Warna hijau untuk ikon sukses */
+  margin-bottom: 20px;
+}
+
+.modal-content h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-size: 1.8em;
+}
+
+.modal-content p {
+  color: var(--text-color);
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.modal-close-btn {
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 12px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: #e67e00;
 }
 
 .footer {
