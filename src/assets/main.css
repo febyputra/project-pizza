@@ -1,0 +1,19 @@
+:root {
+  --primary-color: #ff8c00; /* Orange */
+  --secondary-color: #333;
+  --text-color: #555;
+  --white: #fff;
+  --light-gray: #f4f4f4;
+  --border-color: #ddd;
+  --disabled-color: #ccc;
+  --background-hero: #222; /* Dark overlay for Hero */
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+}
