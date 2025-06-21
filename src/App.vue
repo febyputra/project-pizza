@@ -1,4 +1,5 @@
 <script setup>
+// Perubahan kecil untuk refresh deploy
 import { ref, onMounted, computed, watch } from 'vue'
 
 const pizzas = ref([])
