@@ -417,7 +417,7 @@ onMounted(() => {
 .hero-section {
   position: relative;
   height: 600px;
-  background: url('img/hero.png') no-repeat center center/cover;
+  background: url('/img/hero.png') no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
