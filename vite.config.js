@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 'project-pizza/',
+  base: '/project-pizza/',
   plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
