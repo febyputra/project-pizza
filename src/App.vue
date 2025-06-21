@@ -9,6 +9,8 @@ const selectedSizeId = ref(null)
 const selectedToppingsIds = ref([])
 const totalPrice = ref(0)
 
+const BASE_PATH = 'project-pizza';
+
 const selectedPizza = computed(() => {
   return pizzas.value.find((p) => p.id === selectedPizzaId.value)
 })
@@ -20,9 +22,9 @@ const selectedSize = computed(() => {
 const loadData = async () => {
   try {
     const [pizzaRes, sizeRes, toppingRes] = await Promise.all([
-      fetch('/json/pizza-list.json'),
-      fetch('/json/size-list.json'),
-      fetch('/json/topping-list.json'),
+      fetch(`${BASE_PATH}/json/pizza-list.json`),
+      fetch(`${BASE_PATH}/json/size-list.json`),
+      fetch(`${BASE_PATH}/json/topping-list.json`),
     ])
 
     const pizzaData = await pizzaRes.json()
@@ -104,9 +106,9 @@ watch(
 )
 
 const getPizzaImage = (id) => {
-  if (id === 1) return '/img/pizza/Cheese Pizza.png'
-  if (id === 2) return '/img/pizza/Veggie Pizza.png'
-  if (id === 3) return '/img/pizza/Classical Pizza.png'
+  if (id === 1) return `${BASE_PATH}/img/pizza/Cheese Pizza.png`
+  if (id === 2) return `${BASE_PATH}/img/pizza/Veggie Pizza.png`
+  if (id === 3) return `${BASE_PATH}/img/pizza/Classical Pizza.png`
 }
 
 onMounted(() => {
