@@ -9,7 +9,7 @@ const selectedSizeId = ref(null)
 const selectedToppingsIds = ref([])
 const totalPrice = ref(0)
 
-const BASE_PATH = 'project-pizza';
+const BASE_PATH = '/project-pizza';
 
 const selectedPizza = computed(() => {
   return pizzas.value.find((p) => p.id === selectedPizzaId.value)
