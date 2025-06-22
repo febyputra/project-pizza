@@ -9,9 +9,10 @@ const selectedPizzaId = ref(null)
 const selectedSizeId = ref(null)
 const selectedToppingsIds = ref([])
 const totalPrice = ref(0)
-const showOrderSuccessModal = ref(false);
+const showOrderSuccessModal = ref(false)
+const isNavOpen = ref(false)
 
-const BASE_PATH = '/project-pizza';
+const BASE_PATH = '/project-pizza'
 
 const selectedPizza = computed(() => {
   return pizzas.value.find((p) => p.id === selectedPizzaId.value)
@@ -93,8 +94,12 @@ const calculateTotalPrice = () => {
 }
 
 const handleOrderNow = () => {
-  showOrderSuccessModal.value = true;
-};
+  showOrderSuccessModal.value = true
+}
+
+const toggleNav = () => {
+  isNavOpen.value = !isNavOpen.value
+}
 
 watch(selectedPizzaId, () => {
   selectedToppingsIds.value = selectedToppingsIds.value.filter((toppingId) =>
@@ -127,6 +132,29 @@ onMounted(() => {
     <header class="navbar">
       <div class="container navbar-content">
         <h1 class="logo">Food<span class="primary">now</span></h1>
+        <nav class="nav-links">
+          <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Order</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <button class="btn login-btn">Login</button>
+          <button class="btn register-btn">Register</button>
+        </div>
+        <button class="hamburger-menu" @click="toggleNav" :class="{ open: isNavOpen }">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </header>
+    <div class="mobile-menu-wrapper" :class="{ open: isNavOpen }">
+      <div class="mobile-menu-content">
+        <button class="close-menu-btn" @click="toggleNav" aria-label="Close menu">&times;</button>
         <nav>
           <ul>
             <li><a href="#">Home</a></li>
@@ -141,7 +169,7 @@ onMounted(() => {
           <button class="btn register-btn">Register</button>
         </div>
       </div>
-    </header>
+    </div>
 
     <section class="hero-section">
       <div class="hero-overlay"></div>
@@ -271,7 +299,7 @@ onMounted(() => {
     <div v-if="showOrderSuccessModal" class="modal-overlay">
       <div class="modal-content">
         <div class="modal-icon">
-          <img src="/img/invoice.png" alt="Order Success" class="custom-success-icon">
+          <img src="/img/invoice.png" alt="Order Success" class="custom-success-icon" />
         </div>
         <h3>My Order Success!</h3>
         <p>Order received. Thank you, we have received your order successfully.</p>
@@ -282,7 +310,7 @@ onMounted(() => {
     <footer class="footer">
       <div class="container footer-content">
         <div class="footer-brand">
-          <h1 class="logo">Foodnow</h1>
+          <h1 class="logo">Food<span class="primary-footer">now</span></h1>
           <p>Find Us :</p>
           <div class="social-icons">
             <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
@@ -381,6 +409,10 @@ onMounted(() => {
   background-color: #e67e00;
 }
 
+.primary {
+  color: var(--white);
+}
+
 .navbar {
   background-color: transparent;
   padding: 15px 0;
@@ -397,6 +429,44 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+.nav-links {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-menu-content {
+  display: none;
+}
+
+.nav-links ul {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links ul li a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-links ul li a:hover,
+.nav-links ul li a.active {
+  color: var(--primary-color);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -405,32 +475,38 @@ onMounted(() => {
   margin: 0;
 }
 
-.navbar nav ul {
-  list-style: none;
-  margin: 0;
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   padding: 0;
-  display: flex;
-  gap: 25px;
+  z-index: 1100;
+  position: relative;
 }
 
-.navbar nav ul li a {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
+.hamburger-menu .bar {
+  width: 100%;
+  height: 3px;
+  background-color: var(--white);
+  border-radius: 5px;
+  transition: all 0.3s ease;
 }
 
-.navbar nav ul li a:hover {
-  color: var(--primary-color);
+.hamburger-menu.open .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
 }
 
-.navbar .primary {
-  color: var(--white);
+.hamburger-menu.open .bar:nth-child(2) {
+  opacity: 0;
 }
 
-.auth-buttons {
-  display: flex;
-  gap: 10px;
+.hamburger-menu.open .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .hero-section {
@@ -675,6 +751,8 @@ onMounted(() => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   /* position: sticky; */
   top: 20px;
+  max-width: 480px;
+  width: 100%;
 }
 
 .payment-summary h2 {
@@ -769,12 +847,6 @@ onMounted(() => {
   }
 }
 
-.modal-icon {
-  font-size: 50px;
-  color: #28a745; /* Warna hijau untuk ikon sukses */
-  margin-bottom: 20px;
-}
-
 .modal-content h3 {
   color: var(--primary-color);
   margin-bottom: 15px;
@@ -836,6 +908,10 @@ onMounted(() => {
   margin-bottom: 10px;
 }
 
+.logo .primary-footer {
+  color: black;
+}
+
 .social-icons {
   display: flex;
   gap: 15px;
@@ -848,7 +924,7 @@ onMounted(() => {
 }
 
 .social-icon:hover {
-  color: var(--white);
+  color: #e67e00;
 }
 
 .footer-links h3,
@@ -907,6 +983,7 @@ onMounted(() => {
   padding-top: 20px;
   text-align: center;
   color: #bbb;
+  margin-top: 30px;
 }
 
 /* Responsive Adjustments */
@@ -927,17 +1004,6 @@ onMounted(() => {
     margin-top: 30px;
   }
 
-  .navbar-content {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .navbar nav ul {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-  }
-
   .hero-content h2 {
     font-size: 3em;
   }
@@ -948,10 +1014,30 @@ onMounted(() => {
     text-align: center;
   }
 
+  .footer-brand,
+  .footer-links,
+  .footer-contact,
+  .footer-location {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .navigation-columns {
     flex-direction: column;
     align-items: center;
     gap: 15px;
+  }
+
+  .social-icons {
+    justify-content: center;
+    width: 100%;
   }
 
   .footer-links ul {
@@ -962,17 +1048,218 @@ onMounted(() => {
   .footer-location p {
     justify-content: center;
   }
+
+  .footer-bottom {
+    text-align: center;
+  }
+}
+
+@media (max-width: 991px) and (min-width: 769px) {
+  .navbar-content {
+    /* Mengurangi gap antar item agar lebih rapat */
+    gap: 15px; /* Atau sesuaikan nilai ini sesuai kebutuhan */
+    justify-content: space-between; /* Pastikan tetap tersebar */
+    padding: 0 15px; /* Sedikit padding di samping */
+  }
+
+  .nav-links ul {
+    /* Mengurangi gap antar item menu */
+    gap: 15px;
+  }
+
+  .nav-links ul li a {
+    /* Menyesuaikan ukuran font agar lebih ringkas */
+    font-size: 0.9em;
+  }
+
+  .auth-buttons {
+    /* Mengurangi gap antar tombol */
+    gap: 8px;
+  }
+
+  .btn.login-btn,
+  .btn.register-btn {
+    /* Menyesuaikan padding tombol */
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+
+  .logo {
+    /* Menyesuaikan ukuran logo jika terlalu besar */
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+  }
+
+  .pizza-selection {
+    flex-direction: column;
+  }
+
+  .pizza-card {
+    min-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Reduce modal size on small screens */
+  .modal-content {
+    max-width: 280px;
+    width: 90%;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 768px) {
   .pizza-card {
     min-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
-}
 
-@media (max-width: 480px) {
+  .pizza-selection {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .hamburger-menu {
+    display: flex;
+    z-index: 1000;
+    margin-right: 20px; /* Tambahkan ini untuk margin kanan */
+  }
+
+  .navbar-content { /* Tambahkan ini untuk memastikan logo di kiri dan hamburger di kanan */
+    justify-content: space-between;
+    flex-wrap: nowrap; /* Pastikan tidak wrap */
+    padding: 0 20px;
+  }
+
+  .navbar nav,
+  .auth-buttons {
+    display: none;
+  }
+
+  .mobile-menu-wrapper {
+    display: block;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang gelap transparan */
+    box-shadow: none;
+    z-index: 1100;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    overflow-y: auto;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+  }
+  .mobile-menu-wrapper.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-menu-content {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .mobile-menu-content .auth-buttons {
+    margin-top: 20px;
+  }
+  .hamburger-menu {
+    z-index: 1200;
+  }
+
+  .close-menu-btn {
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    position: absolute;
+    top: 7px;
+    right: 42px;
+    z-index: 10;
+  }
+
+  .mobile-menu-wrapper.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu-wrapper nav ul {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .mobile-menu-wrapper nav ul li a {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .mobile-menu-wrapper nav ul li {
+    list-style: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .mobile-menu-wrapper nav ul li a:hover {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+  }
+
+  .mobile-menu-wrapper .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 20px;
+  }
+
+  .mobile-menu-wrapper .login-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    width: 100%;
+  }
+
+  .mobile-menu-wrapper .register-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    width: 100%;
+  }
+
   .hero-content h2 {
-    font-size: 2.5em;
+    font-size: 2em;
+  }
+
+  .hero-content p {
+    font-size: 1em;
   }
 
   .pizza-order-form {
